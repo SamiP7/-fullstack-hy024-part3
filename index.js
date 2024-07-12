@@ -3,19 +3,19 @@ const app = express()
 
 let persons = [
     {
-      id: "1",
-      name: "Arto Hellas",
-      number: "040-123456"
+        id: "1",
+        name: "Arto Hellas",
+        number: "040-123456"
     },
     {
-      id: "2",
-      name: "Ada Lovelace",
-      number: "39-44-5323523"
+        id: "2",
+        name: "Ada Lovelace",
+        number: "39-44-5323523"
     },
     {
-      id: "3",
-      name: "Dan Abramov",
-      number: "12-43-234345"
+        id: "3",
+        name: "Dan Abramov",
+        number: "12-43-234345"
     },
     {
         id: "4",
@@ -23,6 +23,15 @@ let persons = [
         number: "39-23-6423122"
     }
 ]
+
+app.get('/info', (request, response) => {
+    const time = Date(Date.now())
+    response.send(
+        `<div>Phonebook has info for ${persons.length} people</div>
+        <br>
+        <div>${time.toString()}</div>`
+    )
+})
 
 app.get('/api/persons', (request, response) => {
     response.json(persons)
