@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
-
+'mongodb+srv://samip:<password>@cluster0.'
+'vmx2ufi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 const morgan = require('morgan')
 
 const cors = require('cors')
