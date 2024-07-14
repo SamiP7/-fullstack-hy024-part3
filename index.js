@@ -29,13 +29,11 @@ app.get('/info', (request, response) => {
     )
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
     Person.findById(request.params.id).then(p => {
         response.json(p)
     })
-    .catch((error) => {
-        response.status(404).end()
-    })
+    .catch(error => next(error))
 })
 
 app.get('/api/persons', (request, response) => {
@@ -76,6 +74,7 @@ app.post('/api/persons', (request, response) => {
             })
         }
     })
+    .catch(error => next(error))
 })
 
 
