@@ -27,36 +27,33 @@ const personSchema = new mongoose.Schema({
 
 const Person = mongoose.model('Person', personSchema)
 
-let persons = []
-
-
 if (args.length===3) {
-    console.log('phonebook:')
-    Person.find({}).then(result => {
-        result.forEach(p => {
-          console.log(p.name, p.number)
-        })
-        mongoose.connection.close()
-      })
+  console.log('phonebook:')
+  Person.find({}).then(result => {
+    result.forEach(p => {
+      console.log(p.name, p.number)
+    })
+    mongoose.connection.close()
+  })
 }
 
 else if (args.length===5) {
-    const name = process.argv[3]
-    const number = process.argv[4]
+  const name = process.argv[3]
+  const number = process.argv[4]
 
-    const person = new Person({
-        name: name,
-        number: number,
-    })
+  const person = new Person({
+    name: name,
+    number: number,
+  })
 
-    person.save().then(result => {
-        console.log(`added ${name} number ${number} to phonebook`)
-        mongoose.connection.close()
-    })
-    
-} else {
-    console.log('invalid amount of arguments')
+  person.save().then(() => {
+    console.log(`added ${name} number ${number} to phonebook`)
     mongoose.connection.close()
+  })
+
+} else {
+  console.log('invalid amount of arguments')
+  mongoose.connection.close()
 }
 
 
