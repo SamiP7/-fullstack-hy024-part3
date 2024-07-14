@@ -63,12 +63,12 @@ app.delete('/api/persons/:id', (request, response, next) => {
 app.put('/api/persons/:id', (request, response, next) => {
     const body = request.body
   
-    const note = {
+    const person = {
       name: body.name,
       number: body.number,
     }
   
-    Person.findByIdAndUpdate(request.params.id, note, { new: true, runValidators: true, context: 'query' })
+    Person.findByIdAndUpdate(request.params.id, person, { new: true, runValidators: true, context: 'query' })
       .then(p => {
         response.json(p)
       })
