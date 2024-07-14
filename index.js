@@ -20,29 +20,34 @@ morgan.token('type', function (req, res) {
 })
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :type'))
 
-app.get('/info', (request, response) => {
+app.get('/info', (request, response, next) => {
     const time = Date(Date.now())
     
-    Person.find({}).then(person => {
+    Person.find({})
+    .then(person => {
         response.send(
             `<div>Phonebook has info for ${person.length} people</div>
             <br>
             <div>${time.toString()}</div>`
         )
     })
+    .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
-    Person.findById(request.params.id).then(p => {
+    Person.findById(request.params.id)
+    .then(p => {
         response.json(p)
     })
     .catch(error => next(error))
 })
 
-app.get('/api/persons', (request, response) => {
-    Person.find({}).then(person => {
+app.get('/api/persons', (request, response, next) => {
+    Person.find({})
+    .then(person => {
         response.json(person)
     })
+    .catch(error => next(error))
 })
 
 
@@ -72,12 +77,9 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 app.post('/api/persons', (request, response, next) => {
     const body = request.body
-    if (!body.name || !body.number) {
-        return response.status(400).json({
-            error: 'name or number missing'
-        })
-    }
-    Person.find({name: body.name}).then(p => {
+    
+    Person.find({name: body.name})
+    .then(p => {
         if (p.length > 0) {
             const person = {
                 name: body.name,
@@ -93,28 +95,31 @@ app.post('/api/persons', (request, response, next) => {
                 name: body.name,
                 number: body.number,
             })
-            person.save().then(savedPerson => {
+            person.save()
+            .then(savedPerson => {
                 response.json(savedPerson)
             })
+            .catch(error => next(error))
         }
     })
     .catch(error => next(error))
 })
 
 
-
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
-})
-
 const errorHandler = (error, request, response, next) => {
     console.error(error.message)
   
     if (error.name === 'CastError') {
       return response.status(400).send({ error: 'malformatted id' })
+    } else if (error.name === 'ValidationError') {
+        return response.status(400).json({ error: error.message })
     }
   
     next(error)
 }
 
 app.use(errorHandler)
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+})
