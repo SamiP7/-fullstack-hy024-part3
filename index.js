@@ -22,11 +22,14 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :t
 
 app.get('/info', (request, response) => {
     const time = Date(Date.now())
-    response.send(
-        `<div>Phonebook has info for ${persons.length} people</div>
-        <br>
-        <div>${time.toString()}</div>`
-    )
+    
+    Person.find({}).then(person => {
+        response.send(
+            `<div>Phonebook has info for ${person.length} people</div>
+            <br>
+            <div>${time.toString()}</div>`
+        )
+    })
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
