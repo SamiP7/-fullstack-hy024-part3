@@ -23,6 +23,7 @@ const personSchema = new mongoose.Schema({
 
 const Person = mongoose.model('Person', personSchema)
 
+let persons = []
 
 
 if (args.length===3) {
