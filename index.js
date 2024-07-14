@@ -68,7 +68,7 @@ app.put('/api/persons/:id', (request, response, next) => {
       number: body.number,
     }
   
-    Person.findByIdAndUpdate(request.params.id, note, { new: true })
+    Person.findByIdAndUpdate(request.params.id, note, { new: true, runValidators: true, context: 'query' })
       .then(p => {
         response.json(p)
       })
@@ -85,7 +85,7 @@ app.post('/api/persons', (request, response, next) => {
                 name: body.name,
                 number: body.number,
             }
-            Person.findOneAndUpdate({name: body.name}, person, {new: true})
+            Person.findOneAndUpdate({name: body.name}, person, {new: true, runValidators: true, context: 'query'})
                 .then(p=> {
                     response.json(p)
                 })
